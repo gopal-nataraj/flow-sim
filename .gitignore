@@ -2,5 +2,6 @@
 *.npz
 
 bin/
+notebooks/.ipynb_checkpoints/
 obj/
 

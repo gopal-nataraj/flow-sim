@@ -2,6 +2,6 @@
 *.npz
 
 bin/
-notebooks/.ipynb_checkpoints/
+demos/
 obj/
 

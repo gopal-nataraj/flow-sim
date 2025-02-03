@@ -17,15 +17,12 @@ def inviscidBurgers1d(u_x0, x, t, tol=0.001):
     return u
 
 def testInviscidBurgers1d():
-    x = np.linspace(-3.0, 3.0, 256)
+    x = np.linspace(-3.0, 3.0, 256, endpoint=False)
     u_x0 = np.exp(-8.0*(x+1.0)**2) + 1.5*np.exp(-16.0*(x+2.0)**2)
-    t = np.linspace(0.0, 4.0, 512)
+    t = np.linspace(0.0, 4.0, 512, endpoint=False)
     u = inviscidBurgers1d(u_x0, x, t)
     filename = '../results/inviscidBurgers1d.npz'
     np.savez(filename, x=x, t=t, u=u)
-    
-def testInviscidBurgers1dSine():
-    x = np.linspace(-3.0, 3.0, 256)
     
 def main():
     testInviscidBurgers1d()

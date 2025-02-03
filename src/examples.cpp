@@ -13,7 +13,7 @@ int testInviscidBurgers1d(void) {
     double* u_0x = new double[nx];
     double x = xmin;
     for (int i=0; i<nx; ++i) {
-        u_0x[i] = exp(-8.0*pow(x+1.0, 2.0)) + exp(-16.0*pow(x+2.0, 2.0));
+        u_0x[i] = exp(-8.0*pow(x+1.0, 2.0)) + 1.5*exp(-16.0*pow(x+2.0, 2.0));
         x += dx;
     }
     double tol = 0.001;

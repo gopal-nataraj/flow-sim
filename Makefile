@@ -1,15 +1,17 @@
+BIN_DIR := bin
+INC_DIR := include
+LIB_DIR := lib
 SRC_DIR := src
 OBJ_DIR := obj
-BIN_DIR := bin
 
 EXE := $(BIN_DIR)/burgers
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
 CXX := g++
-CPPFLAGS := -Iinclude -MMD -MP
+CPPFLAGS := -I$(INC_DIR) -MMD -MP -g
 CFLAGS := -Wall
-LDFLAGS := -Llib
+LDFLAGS := -L$(LIB_DIR)
 LDLIBS := -lm
 
 .PHONY: all clean

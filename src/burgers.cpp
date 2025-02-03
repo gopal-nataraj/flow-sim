@@ -1,12 +1,13 @@
 #include <cmath>
+#include <cstring>
 #include <iostream>
 
-#define FAILURE 1
-#define SUCCESS 0
+#include "burgers.hpp"
+#include "util.hpp"
 
 int inviscidBurgers1d(const double* u_0x,
-                      const double& nt,
-                      const double& nx,
+                      const int& nt,
+                      const int& nx,
                       const double& dt,
                       const double& dx,
                       const double& tol,
@@ -19,8 +20,8 @@ int inviscidBurgers1d(const double* u_0x,
     double udiff;
     do {
         std::memcpy(uOld, u, nt*nx*sizeof(double));
-        for (int i=0; i<nt; ++i) {
-            for (int j=0; j<nx; ++j) {
+        for (int i=1; i<nt; ++i) {
+            for (int j=1; j<nx; ++j) {
                 u[i*nx+j] = ((dx*uOld[(i-1)*nx+j]+dt*pow(uOld[i*nx+j],2.0))/
                              (dx+dt*(2.0*uOld[i*nx+j]-uOld[i*nx+(j-1)])));
             }

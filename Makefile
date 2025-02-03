@@ -1,8 +1,9 @@
 BIN_DIR := bin
 INC_DIR := include
 LIB_DIR := lib
-SRC_DIR := src
 OBJ_DIR := obj
+RES_DIR := results
+SRC_DIR := src
 
 EXE := $(BIN_DIR)/burgers
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
@@ -28,6 +29,6 @@ $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	rm -rfv $(BIN_DIR) $(OBJ_DIR)
+	rm -rfv $(BIN_DIR) $(OBJ_DIR) $(RES_DIR)/*.txt
 
 -include $(OBJ:.o=.d)

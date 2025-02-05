@@ -1,3 +1,4 @@
+#include <Eigen/Dense>
 #include <cmath>
 #include <cstring>
 #include <iostream>
@@ -35,5 +36,65 @@ int inviscidBurgers1d(const double* u_0x,
         std::cout << udiff << "\n";
     } while (udiff>tol);
     delete[] uOld;
+    return SUCCESS;
+}
+
+int inviscidBurgers2d(const double* u_0yx,
+                      const double* v_0yx,
+                      const int& nt,
+                      const int& ny,
+                      const int& nx,
+                      const double& dt,
+                      const double& dy,
+                      const double& dx,
+                      const double& tol,
+                      double* u,
+                      double* v) {
+    if ((nx<2)||(ny<2)||(nt<2)) return FAILURE;
+    for (int i=0; i<nt; ++i) {
+        std::memcpy(&u[i*ny*nx], u_0yx, ny*nx*sizeof(double));
+        std::memcpy(&v[i*ny*nx], v_0yx, ny*nx*sizeof(double));
+    }
+    double* uOld = new double[nt*ny*nx];
+    double* vOld = new double[nt*ny*nx];
+    Eigen::MatrixXd A(2, 2);
+    Eigen::VectorXd b(2);
+    Eigen::VectorXd x(2);
+    double diff;
+    do {
+        std::memcpy(uOld, u, nt*ny*nx*sizeof(double));
+        std::memcpy(vOld, v, nt*ny*nx*sizeof(double));
+        for (int i=1; i<nt; ++i) {
+            for (int j=1; j<ny; ++j) {
+                for (int k=1; k<nx; ++k) {
+                    A(0,0) = (1.0/dt + (2*uOld[i*ny*nx+j*nx+k]-uOld[i*ny*nx+j*nx+(k-1)])/dx
+                              + vOld[i*ny*nx+j*nx+k]/dy);
+                    A(0,1) = (uOld[i*ny*nx+j*nx+k]-uOld[i*ny*nx+(j-1)*nx+k])/dy;
+                    A(1,0) = (vOld[i*ny*nx+j*nx+k]-vOld[i*ny*nx+j*nx+(k-1)])/dx;
+                    A(1,1) = (1.0/dt + uOld[i*ny*nx+j*nx+k]/dx 
+                              + (2*vOld[i*ny*nx+j*nx+k]-vOld[i*ny*nx+(j-1)*nx+k])/dy);
+                    b(0) = (uOld[(i-1)*ny*nx+j*nx+k]/dt + pow(uOld[i*ny*nx+j*nx+k], 2.0)/dx
+                            + uOld[i*ny*nx+j*nx+k]*vOld[i*ny*nx+j*nx+k]/dy);
+                    b(1) = (vOld[(i-1)*ny*nx+j*nx+k]/dt + pow(vOld[i*ny*nx+j*nx+k], 2.0)/dy
+                            + uOld[i*ny*nx+j*nx+k]*vOld[i*ny*nx+j*nx+k]/dx);
+                    x = A.solve(b);
+                    u[i*ny*nx+j*nx*k] = x(0);
+                    v[i*ny*nx+j*nx*k] = x(1);
+                }
+            }
+        }
+        diff = 0.0;
+        for (int i=1; i<nt; ++i) {
+            for (int j=1; j<ny; ++j) {
+                for (int k=1; k<nx; ++k) {
+                    diff += std::abs(u[i*ny*nx+j*nx*k]-uOld[i*ny*nx+j*nx*k]);
+                    diff += std::abs(v[i*ny*nx+j*nx*k]-vOld[i*ny*nx+j*nx*k]);
+                }
+            }
+        }
+        std::cout << diff << std::endl;
+    } while (diff>tol);
+    delete[] uOld;
+    delete[] vOld;
     return SUCCESS;
 }

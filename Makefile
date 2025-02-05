@@ -10,9 +10,9 @@ SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
 CXX := g++
-CPPFLAGS := -I$(INC_DIR) -MMD -MP -g
+CPPFLAGS := -I$(INC_DIR) -MMD -MP -fopenmp -g
 CFLAGS := -Wall
-LDFLAGS := -L$(LIB_DIR)
+LDFLAGS := -L$(LIB_DIR) -fopenmp
 LDLIBS := -lm
 
 .PHONY: all clean

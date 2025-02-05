@@ -27,7 +27,7 @@ int writeToFile3d(const std::string& filename,
     for (int i=0; i<nt; ++i) {
         for (int j=0; j<ny; ++j) {
             for (int k=0; k<nx-1; ++k) {
-                file << u[i*ny*nx+j*nx+k] << ", ";
+                file << u[i*ny*nx+j*nx+k] << ",";
             }
             file << u[i*ny*nx+j*nx+(nx-1)] << std::endl;
         }

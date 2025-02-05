@@ -62,4 +62,5 @@ int testInviscidBurgers2d(void) {
     delete[] v_0yx;
     delete[] u;
     delete[] v;
+    return SUCCESS;
 }

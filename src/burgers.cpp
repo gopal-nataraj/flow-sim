@@ -1,6 +1,6 @@
-#include <Eigen/Dense>
 #include <cmath>
 #include <cstring>
+#include <eigen3/Eigen/Dense>
 #include <iostream>
 
 #include "burgers.hpp"
@@ -57,9 +57,9 @@ int inviscidBurgers2d(const double* u_0yx,
     }
     double* uOld = new double[nt*ny*nx];
     double* vOld = new double[nt*ny*nx];
-    Eigen::MatrixXd A(2, 2);
-    Eigen::VectorXd b(2);
-    Eigen::VectorXd x(2);
+    Eigen::Matrix2d A;
+    Eigen::Vector2d b(2);
+    Eigen::Vector2d x(2);
     double diff;
     do {
         std::memcpy(uOld, u, nt*ny*nx*sizeof(double));
@@ -77,7 +77,7 @@ int inviscidBurgers2d(const double* u_0yx,
                             + uOld[i*ny*nx+j*nx+k]*vOld[i*ny*nx+j*nx+k]/dy);
                     b(1) = (vOld[(i-1)*ny*nx+j*nx+k]/dt + pow(vOld[i*ny*nx+j*nx+k], 2.0)/dy
                             + uOld[i*ny*nx+j*nx+k]*vOld[i*ny*nx+j*nx+k]/dx);
-                    x = A.solve(b);
+                    x = A.ldlt().solve(b);
                     u[i*ny*nx+j*nx*k] = x(0);
                     v[i*ny*nx+j*nx*k] = x(1);
                 }

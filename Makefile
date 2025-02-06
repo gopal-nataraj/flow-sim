@@ -29,6 +29,6 @@ $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	rm -rfv $(BIN_DIR) $(OBJ_DIR) $(RES_DIR)/*.txt
+	rm -rfv $(BIN_DIR) $(OBJ_DIR)
 
 -include $(OBJ:.o=.d)

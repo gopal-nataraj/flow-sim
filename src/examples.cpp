@@ -40,14 +40,17 @@ int testInviscidBurgers2d(void) {
     double* u_0yx = new double[ny*nx];
     double* v_0yx = new double[ny*nx];
     double y = ymin;
-    double x = xmin;
+    double x;
     for (int i=0; i<ny; ++i) {
+        x = xmin;
         for (int j=0; j<nx; ++j) {
             u_0yx[i*nx+j] = 0.0;
             u_0yx[i*nx+j] += 1.0*exp(- 8.0*(pow(x+1.0, 2.0)+pow(y+1.0, 2.0)));
             u_0yx[i*nx+j] += 1.5*exp(-16.0*(pow(x+2.0, 2.0)+pow(y+2.0, 2.0)));
             v_0yx[i*nx+j] = u_0yx[i*nx+j];
+            x += dx;
         }
+        y += dy;
     }
     double tol = 0.001;
     double* u = new double[nt*ny*nx];

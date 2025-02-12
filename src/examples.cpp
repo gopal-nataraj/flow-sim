@@ -30,23 +30,24 @@ int testInviscidBurgers1d(void) {
 
 int testInviscidBurgers2d(void) {
     int nt = 512;
-    int ny = 256;
-    int nx = 256;
-    double dt = (4.0-0.0)/nt;
-    double ymin = -3.0;
-    double dy = (3.0-ymin)/ny;
-    double xmin = -3.0;
-    double dx = (3.0-xmin)/nx;
+    int ny = 64;
+    int nx = 64;
+    double dt = (2.0-0.0)/nt;
+    double ymin = -2.0;
+    double dy = (2.0-ymin)/ny;
+    double xmin = -2.0;
+    double dx = (2.0-xmin)/nx;
     double* u_0yx = new double[ny*nx];
     double* v_0yx = new double[ny*nx];
-    double y = ymin;
+    double y = ymin + dy/2.0;
     double x;
     for (int i=0; i<ny; ++i) {
-        x = xmin;
+        x = xmin + dx/2.0;
         for (int j=0; j<nx; ++j) {
-            u_0yx[i*nx+j] = 0.0;
-            u_0yx[i*nx+j] += 1.0*exp(- 8.0*(pow(x+1.0, 2.0)+pow(y+1.0, 2.0)));
-            u_0yx[i*nx+j] += 1.5*exp(-16.0*(pow(x+2.0, 2.0)+pow(y+2.0, 2.0)));
+            u_0yx[i*nx+j] = 1.0;
+            if ((-1.0<x)&&(x<0.0)&&(-1.0<y)&&(y<0.0)) {
+                u_0yx[i*nx+j] += 1.0;
+            }
             v_0yx[i*nx+j] = u_0yx[i*nx+j];
             x += dx;
         }

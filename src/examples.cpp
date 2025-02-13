@@ -68,3 +68,40 @@ int testInviscidBurgers2d(void) {
     delete[] v;
     return SUCCESS;
 }
+
+int testInviscidBurgers2dExplicit(void) {
+    int nt = 1024;
+    int ny = 256;
+    int nx = 256;
+    double dt = (2.0-0.0)/nt;
+    double ymin = -2.0;
+    double dy = (2.0-ymin)/ny;
+    double xmin = -2.0;
+    double dx = (2.0-xmin)/nx;
+    double* u_0yx = new double[ny*nx];
+    double* v_0yx = new double[ny*nx];
+    double y = ymin + dy/2.0;
+    double x;
+    for (int i=0; i<ny; ++i) {
+        x = xmin + dx/2.0;
+        for (int j=0; j<nx; ++j) {
+            u_0yx[i*nx+j] = -y*exp(-(x*x+y*y));
+            v_0yx[i*nx+j] = +x*exp(-(x*x+y*y));
+            x += dx;
+        }
+        y += dy;
+    }
+    double* u = new double[nt*ny*nx];
+    double* v = new double[nt*ny*nx];
+    if (inviscidBurgers2dExplicit(u_0yx, v_0yx, nt, ny, nx, dt, dy, dx, u, v)!=SUCCESS)
+        return FAILURE;
+    if (writeToFile3d("results/inviscidBurgers2dExplicit_u.txt", nt, ny, nx, u)!=SUCCESS)
+        return FAILURE;
+    if (writeToFile3d("results/inviscidBurgers2dExplicit_v.txt", nt, ny, nx, v)!=SUCCESS)
+        return FAILURE;
+    delete[] u_0yx;
+    delete[] v_0yx;
+    delete[] u;
+    delete[] v;
+    return SUCCESS;
+}

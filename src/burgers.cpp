@@ -102,3 +102,33 @@ int inviscidBurgers2d(const double* u_0yx,
     delete[] vOld;
     return SUCCESS;
 }
+
+int inviscidBurgers2dExplicit(const double* u_0yx,
+                              const double* v_0yx,
+                              const int& nt,
+                              const int& ny,
+                              const int& nx,
+                              const double& dt,
+                              const double& dy,
+                              const double& dx,
+                              double* u,
+                              double* v) {
+    if ((nx<2)||(ny<2)||(nt<2)) return FAILURE;
+    for (int i=0; i<nt; ++i) {
+        std::memcpy(&u[i*ny*nx], u_0yx, ny*nx*sizeof(double));
+        std::memcpy(&v[i*ny*nx], v_0yx, ny*nx*sizeof(double));
+    }
+    for (int i=0; i<(nt-1); ++i) {
+        for (int j=0; j<(ny-1); ++j) {
+            for (int k=0; k<(nx-1); ++k) {
+                u[(i+1)*ny*nx+j*nx+k] = u[i*ny*nx+j*nx+k] 
+                    - dt*(u[i*ny*nx+j*nx+k]*(u[i*ny*nx+j*nx+(k+1)]-u[i*ny*nx+j*nx+k])/dx 
+                    + v[i*ny*nx+j*nx+k]*(u[i*ny*nx+(j+1)*nx+k]-u[i*ny*nx+j*nx+k])/dy);
+                v[(i+1)*ny*nx+j*nx+k] = v[i*ny*nx+j*nx+k] 
+                    - dt*(u[i*ny*nx+j*nx+k]*(v[i*ny*nx+j*nx+(k+1)]-v[i*ny*nx+j*nx+k])/dx 
+                    + v[i*ny*nx+j*nx+k]*(v[i*ny*nx+(j+1)*nx+k]-v[i*ny*nx+j*nx+k])/dy);
+            }
+        }
+    }
+    return SUCCESS;
+}        

@@ -9,6 +9,8 @@ int main(int argc, char* argv[]) {
             return testInviscidBurgers1d();
         case '1':
             return testInviscidBurgers2d();
+        case '2':
+            return testInviscidBurgers2dExplicit();
         default:
             std::cout << "error: unknown test case\n";
             return FAILURE;
